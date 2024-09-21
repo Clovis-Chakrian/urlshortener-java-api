@@ -3,6 +3,8 @@ package br.com.clovischakrian.urlshortener.controllers;
 import br.com.clovischakrian.urlshortener.dtos.LinkDto;
 import br.com.clovischakrian.urlshortener.entities.Link;
 import br.com.clovischakrian.urlshortener.services.ILinkService;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +24,14 @@ public class LinkController {
     ILinkService linkService;
 
     @GetMapping
+    @Operation(tags = "Links Controller", summary = "Obtém todos os links cadastrados")
     public ResponseEntity<List<Link>> obterLinks() {
         List<Link> links = linkService.getAllLinks();
         return new ResponseEntity<>(links, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
+    @Operation(tags = "Links Controller", summary = "Redireciona para o link cadastrado")
     public ResponseEntity<Link> redirectById(@PathVariable int id, HttpServletResponse httpResponse) throws IOException {
         Optional<Link> link = linkService.getLinkById(id);
 
@@ -38,13 +42,15 @@ public class LinkController {
     }
 
     @PostMapping
+    @Operation(tags = "Links Controller", summary = "Insere links novos")
     public ResponseEntity<Link> insertLink(@RequestBody @Valid LinkDto linkDto) {
         Link link = linkService.insertLink(linkDto);
         return new ResponseEntity<>(link, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Link> updateLink(@PathVariable int id, @Valid @RequestBody LinkDto linkDto) {
+    @Operation(tags = "Links Controller", summary = "Atualiza links já cadastrados")
+    public ResponseEntity<Link> updateLink(@PathVariable int id, @RequestBody @Valid LinkDto linkDto) {
         Optional<Link> link = linkService.updateLink(linkDto, id);
 
         if (link.isEmpty()) ResponseEntity.notFound();
@@ -53,6 +59,7 @@ public class LinkController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(tags = "Links Controller", summary = "Exclui links cadastrados pelo id")
     public ResponseEntity removeLink(@PathVariable int id) {
         boolean link = linkService.removeLink(id);
 
