@@ -1,17 +1,16 @@
 package br.com.clovischakrian.urlshortener.controllers;
 
-import br.com.clovischakrian.urlshortener.dtos.NewLinkDto;
+import br.com.clovischakrian.urlshortener.dtos.LinkDto;
 import br.com.clovischakrian.urlshortener.entities.Link;
-import br.com.clovischakrian.urlshortener.repositories.LinkRepository;
 import br.com.clovischakrian.urlshortener.services.ILinkService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/links")
@@ -26,8 +25,17 @@ public class LinkController {
     }
 
     @PostMapping
-    public ResponseEntity<Link> insertLink(@Valid @RequestBody NewLinkDto newLinkDto) {
-        Link link = linkService.insertLink(newLinkDto);
+    public ResponseEntity<Link> insertLink(@Valid @RequestBody LinkDto linkDto) {
+        Link link = linkService.insertLink(linkDto);
         return new ResponseEntity<>(link, HttpStatus.CREATED);
+    }
+
+    @PutMapping
+    public ResponseEntity<Link> updateLink(@PathVariable int id, @Valid @RequestBody LinkDto linkDto) {
+        Optional<Link> link = linkService.updateLink(linkDto, id);
+
+        if (link.isEmpty()) ResponseEntity.notFound();
+
+        return new ResponseEntity<>(link.get(), HttpStatus.OK);
     }
 }

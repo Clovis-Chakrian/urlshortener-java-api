@@ -1,6 +1,6 @@
 package br.com.clovischakrian.urlshortener.services;
 
-import br.com.clovischakrian.urlshortener.dtos.NewLinkDto;
+import br.com.clovischakrian.urlshortener.dtos.LinkDto;
 import br.com.clovischakrian.urlshortener.entities.Link;
 import br.com.clovischakrian.urlshortener.repositories.LinkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,17 +25,24 @@ public class LinkService implements ILinkService {
     }
 
     @Override
-    public Link insertLink(NewLinkDto newLinkDto) {
+    public Link insertLink(LinkDto linkDto) {
         Link l = new Link();
-        l.setRedirectLink(newLinkDto.getLink());
+        l.setRedirectLink(linkDto.getLink());
         linkRepository.save(l);
 
         return l;
     }
 
     @Override
-    public Link updateLink(int id) {
-        return null;
+    public Optional<Link> updateLink(LinkDto linkDto, int id) {
+        Optional<Link> link = linkRepository.getByLinkId(id);
+
+        if (link.isEmpty()) return link;
+
+        link.get().setRedirectLink(linkDto.getLink());
+        linkRepository.save(link.get());
+
+        return link;
     }
 
     @Override
