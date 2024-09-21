@@ -38,7 +38,7 @@ public class LinkController {
     }
 
     @PostMapping
-    public ResponseEntity<Link> insertLink(@Valid @RequestBody LinkDto linkDto) {
+    public ResponseEntity<Link> insertLink(@RequestBody @Valid LinkDto linkDto) {
         Link link = linkService.insertLink(linkDto);
         return new ResponseEntity<>(link, HttpStatus.CREATED);
     }
