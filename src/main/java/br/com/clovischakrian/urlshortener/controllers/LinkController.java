@@ -51,4 +51,11 @@ public class LinkController {
 
         return new ResponseEntity<>(link.get(), HttpStatus.OK);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity removeLink(@PathVariable int id) {
+        boolean link = linkService.removeLink(id);
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
 }

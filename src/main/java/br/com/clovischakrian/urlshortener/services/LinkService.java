@@ -47,6 +47,12 @@ public class LinkService implements ILinkService {
 
     @Override
     public boolean removeLink(int id) {
-        return false;
+        Optional<Link> link = linkRepository.getByLinkId(id);
+
+        if (link.isEmpty()) return true;
+
+        linkRepository.delete(link.get());
+
+        return true;
     }
 }
