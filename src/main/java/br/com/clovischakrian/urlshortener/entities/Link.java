@@ -14,7 +14,7 @@ import java.util.Date;
 @EqualsAndHashCode(of = "linkId")
 public class Link {
     @Id()
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int linkId;
     private String redirectLink;
     private Date createdAt;
